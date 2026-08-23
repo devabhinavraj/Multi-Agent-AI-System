@@ -16,6 +16,7 @@ dependencies = [
     "langgraph>=1.2.11",
     "python-dotenv>=1.2.3",
     "requests>=2.34.2",
+    "rich>=15.0.0",
     "tavily-python>=0.7.27",
 ]
 
