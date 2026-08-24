@@ -4,13 +4,13 @@ from tools.tools import web_search , scrape_url
 from langchain.agents import create_agent
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-
+from tools.tools import human_approval
 
 load_dotenv()
 
 # Model Setup
 model = ChatGroq(
-    model = "openai/gpt-oss-120b",
+    model = "openai/gpt-oss-20b",
     temperature=0
 )
 
@@ -19,7 +19,20 @@ model = ChatGroq(
 def build_search_agent():
     return create_agent(
         model= model,
-        tools=[web_search]
+        tools=[web_search],
+        middleware=[human_approval],
+        system_prompt="""
+        You are a web research search agent.
+
+        Your task is to search the web using the web_search tool.
+
+        Rules:
+        - Always use the web_search tool to find information.
+        - Do not write a research report.
+        - Do not summarize the search results.
+        - Return the tool results directly.
+        - Preserve the Title, URL, and Content for every result.
+        """
     )
 
 
