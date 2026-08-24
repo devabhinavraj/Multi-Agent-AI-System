@@ -41,7 +41,7 @@ def research_pipeline(topic : str) -> dict:
                     'content' : (
                         f"Based on the following search results about '{topic}', "
                         f"pick the most relevant URL and scrape it for deeper content.\n\n"
-                        f"Search Results:\n{state['search_result'][:1000]}"
+                        f"Search Results:\n{state['search_result']}"
                     )
                 }
             ]
@@ -90,5 +90,11 @@ def research_pipeline(topic : str) -> dict:
     return state
 
 if __name__ == "__main__":
-    topic = input("\n Enter a Research Topic:")
-    research_pipeline(topic)
+    print("=======Multi Agent AI System=======")
+    print("type exit for quit")
+    while True:
+        user_input = input("\n Enter a Research Topic:")
+        if user_input.lower() == "exit":
+            print("\n👋 Thank you for using the Multi-Agent AI Research System! See you next time. Happy researching! 🚀")
+            break
+        research_pipeline(user_input)
