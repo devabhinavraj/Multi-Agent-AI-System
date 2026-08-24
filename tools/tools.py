@@ -5,6 +5,8 @@ from langchain.tools import tool
 from rich import print
 from tavily import TavilyClient
 from bs4 import BeautifulSoup
+from langchain.agents.middleware import wrap_tool_call
+from langchain_core.messages import ToolMessage
 
 load_dotenv()
 
@@ -22,7 +24,7 @@ def web_search(query : str) -> str:
     out = []
     for r in results['results']:
         out.append(
-            f"Title: {r['title']} \nURL: {r['url']} \nContent: {r['content'][:400]}\n"
+            f"Title: {r['title']}\nURL: {r['url']}\nContent: {r['content'][:400]}\n"
         )
 
     return '\n-----\n'.join(out)
@@ -45,4 +47,28 @@ def scrape_url(url : str) -> str:
         return soup.get_text(separator= " " , strip=True)[:4000]
     except Exception as e:
         return f"Could not scrape URL {str(e)}"
+
+
+@wrap_tool_call
+def human_approval(request , handler):
+    '''Ask for human approval before every tool call.'''
+    try:
+        tool_name = request.tool_call['name']
+
+        confirm = input(
+            f"Agent wants to call '{tool_name}'. Approve? (yes/no): "
+        )
+
+        if confirm.lower() == "no":
+            return ToolMessage (
+                content="Tool call denied by user.",
+                tool_call_id = request.tool_call['id']
+            )
+        return handler(request)
+
+    except Exception as e:
+        return ToolMessage(
+            conten = f"Tool execution failed: {str(e)}",
+            tool_call_id = request.tool_call['id']
+        )
 
