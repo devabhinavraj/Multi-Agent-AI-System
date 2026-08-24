@@ -46,4 +46,3 @@ def scrape_url(url : str) -> str:
     except Exception as e:
         return f"Could not scrape URL {str(e)}"
 
-print(scrape_url.invoke("https://www.gamesradar.com/gta-6-guide/"))
