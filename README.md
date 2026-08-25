@@ -1,5 +1,3 @@
-# Multi Agent AI System
-
 <div align="center">
 
   <h1>🤖 Multi-Agentic AI System</h1>
