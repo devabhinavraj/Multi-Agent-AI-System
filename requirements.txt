@@ -9,3 +9,6 @@ beautifulsoup4
 requests
 
 python-dotenv
+
+streamlit
+fpdf2
